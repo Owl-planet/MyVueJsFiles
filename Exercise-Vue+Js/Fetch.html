@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <button v-on:click.middle="dos" id="Buton">Data</button>
+    <ul id="Liste">
+
+    </ul>
+    <h1 id="ekleden"></h1>
+    <script>
+        var a = [];
+        function eklerim() {
+            var h1 = document.getElementById("ekleden");
+            h1.innerHTML = a[0];
+        }
+
+        function dos(ekle) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    a.push(ekle);
+                    var buton = document.getElementById("Buton");
+                    var listem = document.getElementById("Liste");
+                    buton.addEventListener("click", async function () {
+                        var veri = await fetch("https://jsonplaceholder.typicode.com/posts");
+                        var BeJson = await veri.json();
+                        console.log(BeJson);
+                        BeJson.forEach(ids => {
+                            console.log(ids['id'])
+                            listem.innerHTML += `<li>${ids['id']}</li>`;
+                        });
+                    });
+                    var status = true;
+                    if (status) {
+                        resolve();
+                    } else {
+                        reject();
+                    }
+                }, 1000);
+            });
+        }
+        dos("Ben Geldim").then(response => {
+            console.log("Eklendi mi ?");
+            eklerim();
+        }).catch(error => {
+            console.log("Eklenmedi");
+        });
+    </script>
+</body>
+
+</html>
